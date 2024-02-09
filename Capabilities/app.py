@@ -57,6 +57,9 @@ def recognize_text(file_id):
     result = translation_service.translate_text(text, fromLang, toLang)
 
     audio = reading_service.voice_over(result['translatedText'])
+    with open('audio.mp3', 'wb') as f:
+        f.write(audio)
+
     audio_base64 = base64.b64encode(audio).decode('utf-8')
 
     res = {'audio': audio_base64, 'text': text, 'translation': result}
