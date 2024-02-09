@@ -1,13 +1,14 @@
 import boto3
 import logging
 
-from botocore.exceptions import ClientError
+logging.basicConfig(level=logging.INFO, filename='app.log')
+logger = logging.getLogger()
 
 
 class StorageService:
     def __init__(self, storage_location):
         """
-        It is taking the storage location as an argument
+        It is taking the storage location as an argument and initializing the boto3 client
         """
         self.client = boto3.client('s3')
         self.bucket_name = storage_location
@@ -25,8 +26,9 @@ class StorageService:
             self.client.put_object(Bucket=self.bucket_name,
                                    Body=file_bytes,
                                    Key=file_name)
-        except ClientError as e:
+        except Exception as e:
             logging.error(e)
+            print(e)
             return False
         # using the put_object method to upload the file - method from boto3
 

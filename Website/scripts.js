@@ -70,6 +70,7 @@ function annotateImage(translations) {
     while (translationsElem.firstChild) {
         translationsElem.removeChild(translationsElem.firstChild);
     }
+    // changed here because I need the whole para translated at once
     let pTag = document.createElement("p");
     let translationText = document.createTextNode(translations["text"] + " -> \n" + translations["translation"]["translatedText"]);
 
@@ -78,9 +79,11 @@ function annotateImage(translations) {
 
     translationsElem.appendChild(pTag);
 
+    // calling addAudio function and passing the audio encoded string
     addAudio(translations["audio"]);
 }
 
+// created a function addAudio to add audio to the page
 function addAudio(voice) {
     // wait for 5 sec
     setTimeout(addAudio, 5000);
@@ -106,7 +109,7 @@ function uploadAndTranslate() {
     uploadImage()
         .then(image => updateImage(image))
         .then(image => translateImage(image))
-        .then(res => annotateImage(res))
+        .then(res => annotateImage(res)) // Getting the resoponse
         .catch(error => {
             alert("Error: " + error);
         })

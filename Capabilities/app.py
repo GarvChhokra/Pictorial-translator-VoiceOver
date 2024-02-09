@@ -28,6 +28,9 @@ reading_service = ReadingService()
 
 @app.route('/images', methods=['POST'], cors=True)
 def upload_image():
+    """
+    It is taking the filebytes and filename from the request and uploading the file to the storage service
+    """
     request = app.current_request
     data = request.json_body
     filename = data['filename']
@@ -46,16 +49,24 @@ def upload_image():
 
 @app.route('/images/{file_id}/translate-text', methods=['POST'], cors=True)
 def recognize_text(file_id):
+    """
+    It is taking the file_id from the request and detecting the text from the image and translating it to the desired language. Also doing the voice over of the translated text
+    :param file_id:
+    :return:
+    """
     request = app.current_request
     data = request.json_body
     fromLang = data['fromLang']
     toLang = data['toLang']
+    # Detect the text from the image
     recognition_service = RecognitionService(storage_service)
     file_id = urllib.parse.unquote(file_id)
     text_lines = recognition_service.detect_text(file_id)
     text = ' '.join(line['text'] for line in text_lines)
+    # Translate the text to the desired language
     result = translation_service.translate_text(text, fromLang, toLang)
 
+    # Download the audio file
     audio = reading_service.voice_over(result['translatedText'])
     with open('audio.mp3', 'wb') as f:
         f.write(audio)

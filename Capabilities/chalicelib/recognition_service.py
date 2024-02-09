@@ -26,6 +26,7 @@ class RecognitionService:
             # checking if it is a line then appending it on the lines array, saving confidence and boundingBox as well
             if detection['Type'] == 'LINE':
                 lines.append({
+                    # only taking the text from the response not using confidence
                     'text': detection['DetectedText'],
                 })
 
