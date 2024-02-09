@@ -23,8 +23,8 @@ class StorageService:
         """
         try:
             self.client.put_object(Bucket=self.bucket_name,
-                               Body=file_bytes,
-                               Key=file_name)
+                                   Body=file_bytes,
+                                   Key=file_name)
         except ClientError as e:
             logging.error(e)
             return False
